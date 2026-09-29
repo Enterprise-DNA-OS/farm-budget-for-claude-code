@@ -66,6 +66,7 @@ try{
  await call('retain-evidence','Invoice','--farm=Test Farm','--date=2030-01-01','--reference=2030-03-31','--until=2037-03-31','--source=archive/invoice','--hold','--by=Tester');assert.equal((await call('compliance','--farm=Test Farm'))[0].rule,'LEGAL-HOLD');
  await call('log','Read the source before bank review','--farm=Test Farm','--by=Tester');
  const draft=(await call('draft-bank-note','--farm=Test Farm'))[0].file;assert.match(fs.readFileSync(draft,'utf8'),/DRAFT/);assert.match(fs.readFileSync(draft,'utf8'),/Read the source/);
+ const ownedBefore=Number((await db.query('select count(*) n from cash_entries where farm_id=$1',[f.id]))[0].n);await db.exec(seed);assert.equal(Number((await db.query('select count(*) n from cash_entries where farm_id=$1',[f.id]))[0].n),ownedBefore);
  const ex=await call('export');assert.equal(ex.cash_entries.length,await count('cash_entries'));assert.equal(ex.farms.length,3);assert.equal(ex.import_batches.length,await count('import_batches'));
  const out=path.join(tmp,'backup.json');await call('export',`--out=${out}`);await assert.rejects(call('export',`--out=${out}`),/EEXIST/);
  assert.equal(cents('(1,234.56)'),-123456);assert.equal(cents('-0.01'),-1);for(const bad of ['1,23','1.234','USD 4','NaN','1e4',''])assert.throws(()=>cents(bad));assert.throws(()=>month('2026-13'));assert.throws(()=>date('2026-02-30'));

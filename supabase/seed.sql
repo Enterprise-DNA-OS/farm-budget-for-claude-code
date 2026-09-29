@@ -17,7 +17,8 @@ select f.id,e.id,a.id,(f.start_month+(i||' months')::interval)::date,s,
  when 'Feed payments' then -3200000 else -2500000 end + case when s='actual' and a.direction='out' then -300000 else 0 end,
  'Fictional demonstration cash summary'
 from farms f join enterprises e on e.farm_id=f.id join accounts a on a.farm_id=f.id cross join generate_series(0,11) i cross join unnest(array['budget','forecast','actual']) s
-where s<>'actual' or (f.start_month+(i||' months')::interval)::date<=f.actual_through on conflict do nothing;
+where f.id in ('10000000-0000-0000-0000-000000000001','10000000-0000-0000-0000-000000000002')
+ and (s<>'actual' or (f.start_month+(i||' months')::interval)::date<=f.actual_through) on conflict do nothing;
 insert into production(id,enterprise_id,month,unit,budget_qty,actual_qty)
 select '40000000-0000-0000-0000-000000000001',e.id,f.actual_through,'kgMS',42000,38500 from farms f join enterprises e on e.farm_id=f.id where f.name='Kowhai Dairy' on conflict do nothing;
 insert into livestock(id,enterprise_id,month,stock_class,opening,births,purchases,sales,deaths,closing)
