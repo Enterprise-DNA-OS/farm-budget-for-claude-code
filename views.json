@@ -1,13 +1,30 @@
 [
   {
-    "name": "week",
-    "title": "This week",
-    "subtitle": "Farm Budget for Claude Code: what needs attention, rendered by npm run view",
+    "name": "season",
+    "title": "Seasonal cash review",
+    "subtitle": "Actuals to the cutoff, forecasts after it. Recorded cash only; review coverage before relying on a balance.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Monthly cash",
+        "sql": "select farm,currency,month,basis,net_cents,closing_cents,headroom_cents,cells,status from v_cashflow order by farm,month"
+      },
+      {
+        "title": "Decisions",
+        "sql": "select farm,kind,record,detail from v_attention order by farm,kind"
+      }
+    ]
+  },
+  {
+    "name": "production",
+    "title": "Production and stock review",
+    "sections": [
+      {
+        "title": "Production",
+        "sql": "select farm,enterprise,month,unit,budget_qty,actual_qty,variance_qty,variance_pct from v_production order by farm,month"
+      },
+      {
+        "title": "Livestock count",
+        "sql": "select farm,enterprise,month,stock_class,opening,births,purchases,sales,deaths,closing,expected_closing,difference from v_livestock order by farm,month"
       }
     ]
   }

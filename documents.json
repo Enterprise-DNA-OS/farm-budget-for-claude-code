@@ -1,11 +1,48 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
+    "name": "bank-pack",
+    "title": "Seasonal cash and bank review",
+    "for_each": "select id,name from farms order by name",
     "file": "name",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Planning basis",
+        "note": "Internal planning pack, not an application, audited statement or loan recommendation. Cash amounts follow the imported report basis; keep GST treatment consistent.",
+        "sql": "select name,currency,start_month,actual_through,opening_cents,overdraft_limit_cents from farms where id=$1"
+      },
+      {
+        "title": "Monthly headroom",
+        "sql": "select month,basis,net_cents,budget_cents,closing_cents,headroom_cents,cells,status from v_cashflow where farm_id=$1 order by month"
+      },
+      {
+        "title": "Budget variance",
+        "sql": "select enterprise,account,month,budget_cents,actual_cents,variance_cents,coverage from v_variance where farm_id=$1 order by month,account"
+      },
+      {
+        "title": "Decisions and deadlines",
+        "sql": "select kind,record,detail from v_attention where farm_id=$1 order by kind"
+      },
+      {
+        "title": "Recorded assumptions",
+        "sql": "select author,body,created_at from notes where farm_id=$1 order by created_at"
+      }
+    ]
+  },
+  {
+    "name": "stock-reconciliation",
+    "title": "Stock reconciliation working paper",
+    "for_each": "select id,name from farms order by name",
+    "file": "name",
+    "sections": [
+      {
+        "title": "Monthly stock movements",
+        "note": "Arithmetic count check only. No livestock tax valuation, animal traceability filing or physical stock certification.",
+        "sql": "select enterprise,month,stock_class,opening,births,purchases,sales,deaths,closing,expected_closing,difference from v_livestock where farm_id=$1 order by month"
+      },
+      {
+        "title": "Record checks",
+        "sql": "select record,rule,issue,source from v_compliance where farm_id=$1"
+      }
     ]
   }
 ]

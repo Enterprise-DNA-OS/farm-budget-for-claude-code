@@ -1,24 +1,15 @@
-# Why there is no front end
+# Why no front end
 
-Figured is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+A farm's seasonal review is a set of questions about cash, production, stock and deadlines. The database stores the answers. Claude Code, Codex, OpenCode or Cursor runs the same recipes against those records.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+`npm run view` writes read-only HTML. `npm run docs` writes bank review packs and stock reconciliation working papers. Neither hosts a server. Open the files in a browser and print to PDF. They contain private farm records; keep them in your own storage.
 
-## What you gain
+A screen gives field staff mobile entry, offline synchronisation, graphical planning and controlled logins. This free base does not. Enterprise DNA can scope those interfaces and connections into your version. A shared database requires deployment-specific access control, backup and recovery; the CLI assumes trusted operators. PGlite is a single-process local store. Do not point two processes at the same local data folder.
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
+This is a cash planning model, not a three-way accounting engine. It does not calculate GST, profit, balance sheets, livestock valuations, depreciation, borrowing eligibility or filed returns. Cash figures retain the report's treatment of tax. The bank review compares balances with the operator's entered cash limit. Keep the ledger and accountant in charge of statutory work.
 
-## What you give up
+The twelve-month planning window starts at the farm's start_month. Changing to the next year needs a checked opening balance and a migration or a new farm planning record; /customise can add multi-year seasons. Actuals replace forecast months only through the explicit actual_through cutoff. Sensitivity changes forecast receipts and payments and leaves actuals alone. Blank months show incomplete. Complete account coverage still needs reconciliation to the source.
 
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
+Your code has an MIT licence. Database hosting, backups and the coding agent may have charges. Omni by Enterprise DNA brings your records across, builds your rules and runs the result for a setup fee, then a retainer.
 
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep Figured. If you need the answers more than the screens, this is cheaper, faster and yours.
-
-Installed and run for you: https://enterprisedna.co/omni/instead-of/figured
+Coverage check: each month needs an explicit cell for every account and activity combination already recorded for that farm. Missing cells mark that month and later balances incomplete. The bank review flags incomplete coverage anywhere in the season. Enter zero only when confirmed by the source. An account absent from the entire database still requires manual reconciliation.
