@@ -97,7 +97,7 @@ Use a separate DATA_DIR for real work. Shared Postgres uses DATABASE_URL and npm
 | `/customise` | Change fields or rules through a tested migration |
 | `/new-view` | Add a branded read-only HTML view |
 
-The one CLI is `npm run farm -- <command>`. `--json` returns structured data. Names match case-insensitively; ids accept prefixes. Missing or ambiguous names list candidates and exit 1. See each recipe for write examples.
+The one CLI is `npm run farm -- <command>`. `--json` returns all structured data. `--columns=month,closing_cents,headroom_cents` selects columns in human output. Names match case-insensitively; ids accept prefixes. Missing or ambiguous names list candidates and exit 1. See each recipe for write examples.
 
 ## Ten questions answered today
 

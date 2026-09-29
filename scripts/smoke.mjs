@@ -5,7 +5,7 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {getDb,REPO_ROOT} from './lib/db.mjs';
 import {migrate} from './migrate.mjs';
-import {run,reads,cents,month,date} from './farm.mjs';
+import {run,reads,cents,month,date,human} from './farm.mjs';
 import {parseCsv} from './lib/csv.mjs';
 const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'farm-budget-test-'));
 process.env.DATABASE_URL=process.env.TEST_DATABASE_URL||'';process.env.DATA_DIR=path.join(tmp,'db');process.env.OUTPUT_DIR=tmp;
@@ -20,7 +20,7 @@ try{
  const k=(await call('farm','KOWHAI dairy')).farm;
  assert.equal((await call('farm',k.id)).farm.id,k.id);
  await assert.rejects(call('farm','10000000'),/ambiguous/);await assert.rejects(call('farm','missing'),/not found/);
- const cash=await call('cashflow','--farm=Kowhai');assert.equal(cash.length,12);assert.equal(Number(cash[0].closing_cents),3000000);assert.equal(Number(cash[2].closing_cents),-300000);assert.ok(cash.some(r=>r.status==='OVER LIMIT'));
+ const cash=await call('cashflow','--farm=Kowhai');assert.match(human(cash,['month','closing_cents']),/closing/);assert.throws(()=>human(cash,['not_a_column']),/Unknown output/);assert.equal(cash.length,12);assert.equal(Number(cash[0].closing_cents),3000000);assert.equal(Number(cash[2].closing_cents),-300000);assert.ok(cash.some(r=>r.status==='OVER LIMIT'));
  const missing=(await db.query("select * from cash_entries where farm_id=$1 and scenario='forecast' order by month desc limit 1",[k.id]))[0];
  await db.query('delete from cash_entries where id=$1',[missing.id]);
  assert.equal((await call('cashflow','--farm=Kowhai')).at(-1).status,'INCOMPLETE');
